@@ -1,6 +1,8 @@
 # Mateusz Pełechaty, indeks: 261737
 
-include("common.jl")
+function calculate(num)
+    return Float64(num*Float64(1/num))
+end
 
 function find()
     start = Float64(1.0)
@@ -14,5 +16,4 @@ function find()
     end
 end
 found, nextfloat_uses = find()
-println("Po uzyciu nextfloat ", nextfloat_uses, " razy otrzymałem liczbę ")
-println(found, ", bitstring: ", bitstring(found))
+println("Found: ", found, ", bitstring: ", bitstring(found))

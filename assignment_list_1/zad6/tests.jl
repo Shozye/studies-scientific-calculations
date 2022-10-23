@@ -9,8 +9,9 @@ function g(x)
 end
 
 x = 1
-for i in 1:20
+println("\$x\$ & \$f(x)\$ & \$g(x)\$ \\\\ \\hline")
+for i in 1:12
     global x
     x /= 8
-    println("x=8^-", i, " f(x)=", f(x), ", g(x)=", g(x))
+    println("\$8^{-",i ,"}\$ & ", f(x)," & ", g(x), " \\\\ \\hline")
 end

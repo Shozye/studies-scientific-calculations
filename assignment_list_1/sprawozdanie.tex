@@ -109,7 +109,7 @@ Then I am returning $max3$
 We can see that \emph{floatmax} is the same as \emph{W. Kahan's} Max \newline
 My method of calculating maximum gets me wrong because doubling number reaches infinity. 
 So $my max = \frac{1}{2} \cdot floatmax$
-\section{Exercise - Trick Macheps}
+\section{Exercise - Tricky Macheps Calculation}
 Check in \emph{Julia} if $3\cdot(4/3-1)-1$ is Machine Epsilon. Conduct experiments for Float16, Float32 and Float64
 \subsubsection*{Solution can be found in}
 \begin{verbatim}
@@ -128,7 +128,7 @@ Macheps was calculated by \emph{nextfloat}(1.0) and W Kahan's Macheps is calcula
     \end{tabular}
 \end{table}
 \subsubsection*{Conclusion}
-We can see that $macheps = 3\cdot(4/3-1)-1$ with an accuracy of up to setting
+We can see that $macheps = 3\cdot(4/3-1)-1$ with an accuracy of up to sign
 \section{Exercise - Number Distribution}
 Check experimentally that every number $ x \in [1, 2) $ is distributed evenly with step $\delta = 2^{-52}$
 It also means it can be represented by $ x = 1 + k\delta $ for $\delta = 2^{-52}$ and $k=1,2,...,2^{52}-1$
@@ -155,6 +155,80 @@ We can see that mantissa of next(num) is $\beta^{1-t}$ bigger than mantissa of n
 exponent stays the same. Here $t = 53$ and $c = 0$ so difference is $\beta^{1-t} = \beta^{-52}$ \newline
 We can say that $num = 2^{c} \cdot M$. Then $next(num) = 2^c \cdot (M + \beta^{1-t})$ \newline
 Then difference is $next(num) - num = 2^c \cdot B^{1-t}$ \newline
-\textbf{Q:} What is the distribution of floats in range $[\frac{1}{2}, 1)$?\newline\textbf{Q:} What is it in range $[2, 4)$?\newline\textbf{Q:}  How can they be represented in these ranges? \newline
-\textbf{A:} They are the same value as seen in table below. \newline
+\textbf{Q:} What is the distribution of floats in range $[\frac{1}{2}, 1)$? How can they be represented?\newline
+\textbf{A:} Distribution is with step $\delta=\beta^{-53}$ and they can be represented as $ x = 1 + k\delta $ where $k=1,2,...,2^{52}-1$ \newline
+\textbf{Q:} What is it in range $[2, 4)$? How can they be represented? \newline
+\textbf{A:} Distribution is with step $\delta=\beta^{-51}$ and they can be represented as $ x = 1 + k\delta $ where $k=1,2,...,2^{52}-1$ \newline
+\section{Exercise Reciprocal of a number}
+Find smallest number $x$ such that $x \cdot 1/x \neq 1$
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad4/taskB.jl
+\end{verbatim}
+\subsubsection*{Method and results}
+We start with $x := 1$ and we do $x := nextfloat(x)$ until $x \cdot 1/x = 1$
+\begin{verbatim}
+    Found: 1.000000057228997, 
+    bitstring: 0011111111110000000000000000000000001111010111001011111100101010
+\end{verbatim}
+\section{Exercise - Scalar Product}
+Calculate scalar product of x and y in float32 and float64\newline
+$x = [2.718281828, -3.141592654, 1.414213562, 0.5772156649, 0.3010299957]$ \newline
+$y = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049]$ \newline
+Add products of $x_i$ and $y_i$ in 4 ways.
+\begin{enumerate}
+    \item $\sum_{i=0}^{4}x_i \cdot y_i$
+    \item $\sum_{i=0}^{4}x_{4-i} \cdot y_{4-i}$
+    \item Add sorted by absolute value of $x_i \cdot y_i$ decreasing
+    \item Add sorted by absolute value of $x_i \cdot y_i$ ascending
+\end{enumerate}
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad5/solution.jl
+\end{verbatim}
+\subsubsection*{Results}
+Real value:  1.0066e-11
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+        ~ & Float32 & Float64 \\ \hline
+        Front & -0.4999443 & 1.0252e-10 \\ \hline
+        Back & -0.4543457 & -1.5643e-10 \\ \hline
+        BigToSmall & -0.5 & 0.0 \\ \hline
+        SmallToBig & -0.5 & 0.0 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+Summation order matters and can change result by a lot
+\section{Exercise - Equivalent functions}
+Calculate in \textbf{Julia} in \textbf{Float64} following functions 
+$$f(x) = \sqrt{x^2 + 1} - 1$$
+$$g(x) = x^2 / (\sqrt{x^2 + 1} + 1)$$
+for $x = 8^{-k}$ for $k=1,2,3,...$ \newline
+Why is computer giving different results even though $f==g$ ?
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad6/tests.jl
+\end{verbatim}
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    $x$ & $f(x)$ & $g(x)$ \\ \hline
+    $8^{-1}$ & 0.0077822185373186414 & 0.0077822185373187065 \\ \hline
+    $8^{-2}$ & 0.00012206286282867573 & 0.00012206286282875901 \\ \hline
+    $8^{-3}$ & 1.9073468138230965e-6 & 1.907346813826566e-6 \\ \hline
+    $8^{-4}$ & 2.9802321943606103e-8 & 2.9802321943606116e-8 \\ \hline
+    $8^{-5}$ & 4.656612873077393e-10 & 4.6566128719931904e-10 \\ \hline
+    $8^{-6}$ & 7.275957614183426e-12 & 7.275957614156956e-12 \\ \hline
+    $8^{-7}$ & 1.1368683772161603e-13 & 1.1368683772160957e-13 \\ \hline
+    $8^{-8}$ & 1.7763568394002505e-15 & 1.7763568394002489e-15 \\ \hline
+    $8^{-9}$ & 0.0 & 2.7755575615628914e-17 \\ \hline
+    $8^{-10}$ & 0.0 & 4.336808689942018e-19 \\ \hline
+    $8^{-11}$ & 0.0 & 6.776263578034403e-21 \\ \hline
+    $8^{-12}$ & 0.0 & 1.0587911840678754e-22 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
 \end{document}
