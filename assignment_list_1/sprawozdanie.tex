@@ -6,13 +6,13 @@
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
-\title{Scientific Calculations - List 1}
+\title{Scientific Calculations - Exploration of Arithmetic}
 \author{Mateusz Pełechaty}
 \date{23 October 2022}%
 \begin{document}
 \maketitle
 
-\section{Exploration of Arithmetic}
+\section{Exercise - Basic Exploration}
 \subsection{Machine Epsilon}
 Machine epsilon ($macheps$) is the smallest number $x$ such that $1+x > 1$ and $rd(1+x) = 1+x$. \newline
 Find machine epsilon with Julia and compare results with the function eps and with values from float.h
@@ -28,9 +28,9 @@ It was calculated by setting $macheps := 1$ and then if $1+macheps > 1$, then $m
     \begin{tabular}{|l|l|l|l|}
     \hline
         Exercise 1.1 & Macheps & Eps & Float.h \\ \hline
-        Float16 & 0.000977 & 0.000977 & NULL \\ \hline
-        Float32 & 1.1920929e-7 & 1.1920929e-7 & 1.192093e-07 \\ \hline
-        Float64 & 2.220446049250313e-16 & 2.220446049250313e-16 & 2.220446e-16 \\ \hline
+        Float16 & 0.000977 & 0.000977 & ~ \\ \hline
+        Float32 & 1.1920e-7 & 1.1920e-7 & 1.1920e-07 \\ \hline
+        Float64 & 2.2204e-16 & 2.2204e-16 & 2.2204e-16 \\ \hline
     \end{tabular}
 \end{table}
 \subsubsection*{Conclusion}
@@ -61,24 +61,27 @@ nextfloat(0.0) and my method of calculating $\eta$ provide the same values. \new
 Values are almost the same as $MIN_{sub}$
 \subsection{Questions}
 \textbf{Q:} What is difference between \emph{macheps} and arithmetic precision ($\epsilon$)? \newline
-\textbf{A:} Macheps is the smallest number that meets condition: $1+macheps > 1$. We can also say that $macheps=\beta^{1-t}$.  
+\textbf{A:} Macheps is the smallest number that meets condition: $1+macheps > 1$ and $rd(1+macheps) = 1+macheps$. We can also say that $macheps=\beta^{1-t}$.  
 $\epsilon$ on the other hand is biggest relative error that can happen due to rounding 
 in arithmetic. So it is the smallest number $\epsilon$, 
 that meets condition  $ \epsilon \geq \delta = \frac{|rd(x) - x|}{x}$ for some number $x$. It was calculated in the lecture that $\epsilon = \frac{1}{2}\beta^{1-t}$ 
 \newline It follows from here that $\epsilon = \frac{macheps}{2}$
 \newline
 \textbf{Q:} What is difference between $\eta$ and ($MIN_{sub}$)? \newline
-\textbf{A:} $MIN_{sub}$ is minimal subnormal number. $\eta$ is defined by minimal number bigger than 0. They should be the same, but there are little differences between them
-\textbf{Q:} What is the difference between return value of \emph{floatmin} and $MIN_{nor}$ \newline
-\textbf{A:} They are the same value as seen in table below. Values of $MIN_{nor}$ are taken from \emph{W. Kahan's} book
+\textbf{A:} $MIN_{sub}$ is minimal subnormal number. $\eta$ is defined by minimal number bigger than 0. 
+They should be the same, but there are little differences between them \newline
+\textbf{Q:} What is the returned by \emph{floatmin} and what is it's connection with $MIN_{nor}$ \newline
+\textbf{A:} They are the same value as seen in table below. \newline
+Values of $MIN_{nor}$ are taken from \emph{W. Kahan's} book \newline
+Values of floatmin are calculated in ./zad1/floatmin.jl
 \begin{table}[!ht]
     \centering
     \begin{tabular}{|l|l|l|}
     \hline
         Q3 & floatmin & $MIN_{nor}$ \\ \hline
         Float16 & 6.104e-5 & ~ \\ \hline
-        Float32 & 1.1754944e-38 & 1.2E-38 \\ \hline
-        Float64 & 2.2250738585072014e-308 & 2.2E-308 \\ \hline
+        Float32 & 1.1755e-38 & 1.2E-38 \\ \hline
+        Float64 & 2.2251e-308 & 2.2E-308 \\ \hline
     \end{tabular}
 \end{table}
 \subsection{FloatMax}
@@ -106,4 +109,52 @@ Then I am returning $max3$
 We can see that \emph{floatmax} is the same as \emph{W. Kahan's} Max \newline
 My method of calculating maximum gets me wrong because doubling number reaches infinity. 
 So $my max = \frac{1}{2} \cdot floatmax$
+\section{Exercise - Trick Macheps}
+Check in \emph{Julia} if $3\cdot(4/3-1)-1$ is Machine Epsilon. Conduct experiments for Float16, Float32 and Float64
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad2/calculate_macheps.jl
+\end{verbatim}
+\subsubsection*{Method and results}
+Macheps was calculated by \emph{nextfloat}(1.0) and W Kahan's Macheps is calculated by specified above.
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+        Exercise 2 & Macheps & Kahan Macheps \\ \hline
+        Float16 & 0.000977 & -0.000977 \\ \hline
+        Float32 & 1.1920e-7 & 1.1920e-7 \\ \hline
+        Float64 & 2.2204e-16 & -2.2204e-16 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+We can see that $macheps = 3\cdot(4/3-1)-1$ with an accuracy of up to setting
+\section{Exercise - Number Distribution}
+Check experimentally that every number $ x \in [1, 2) $ is distributed evenly with step $\delta = 2^{-52}$
+It also means it can be represented by $ x = 1 + k\delta $ for $\delta = 2^{-52}$ and $k=1,2,...,2^{52}-1$
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad3/experiment.jl
+\end{verbatim}
+\subsubsection*{Method and results}
+Experiment description: 
+\begin{enumerate}
+\item Pick random number $x \in [1,2)$. 
+\item Make $next := nextfloat(x)$ 
+\item Print their bitstrings
+\end{enumerate}
+Example results below:
+\begin{verbatim}
+num      : 1.3881779261232619
+next(num): 1.388177926123262
+num:       0011111111110110001101011111101000001110100110111010011111111110
+next(num): 0011111111110110001101011111101000001110100110111010011111111111
+\end{verbatim}
+\subsubsection*{Conclusion}
+We can see that mantissa of next(num) is $\beta^{1-t}$ bigger than mantissa of num and
+exponent stays the same. Here $t = 53$ and $c = 0$ so difference is $\beta^{1-t} = \beta^{-52}$ \newline
+We can say that $num = 2^{c} \cdot M$. Then $next(num) = 2^c \cdot (M + \beta^{1-t})$ \newline
+Then difference is $next(num) - num = 2^c \cdot B^{1-t}$ \newline
+\textbf{Q:} What is the distribution of floats in range $[\frac{1}{2}, 1)$?\newline\textbf{Q:} What is it in range $[2, 4)$?\newline\textbf{Q:}  How can they be represented in these ranges? \newline
+\textbf{A:} They are the same value as seen in table below. \newline
 \end{document}
