@@ -1,4 +1,8 @@
 # Mateusz Pełechaty, indeks: 261737
+
+"""
+:param type: IS a type of max to calculate
+"""
 function getMax(type)
     max = type(4)
     prev_prev_max = type(1)

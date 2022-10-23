@@ -2,10 +2,18 @@
 
 include("functions.jl")
 
+"""
+Calculates front sum of product asked in exercise 
+:param type: either float32 or float64
+"""
 function front(type)
     product = get_product(type)
     return sum(product, false, type) # dodawaj z lewej do prawej
 end
+"""
+Calculates bigtosmall sum of product asked in exercise 
+:param type: either float32 or float64
+"""
 function big_to_small(type)
     product = get_product(type)
     nonnegative = sort(product[product .>= 0], rev=true) # dodatnie z gory na dol
@@ -13,6 +21,10 @@ function big_to_small(type)
     return sum(nonnegative, false, type) + sum(negative, false, type) # dodawaj z duzych do malych
 
 end
+"""
+Calculates small to big sum of product asked in exercise 
+:param type: either float32 or float64
+"""
 function small_to_big(type)
     product = get_product(type)
     nonnegative = sort(product[product .>= 0], rev=true) # dodatnie z gory na dol
@@ -21,6 +33,10 @@ function small_to_big(type)
     
 end
 
+"""
+Calculates back sum of product asked in exercise 
+:param type: either float32 or float64
+"""
 function back(type)
     product = get_product(type)
     return sum(product, true, type) # dodawaj z prawej do lewej

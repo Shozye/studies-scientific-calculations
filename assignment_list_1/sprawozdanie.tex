@@ -206,7 +206,8 @@ Calculate in \textbf{Julia} in \textbf{Float64} following functions
 $$f(x) = \sqrt{x^2 + 1} - 1$$
 $$g(x) = x^2 / (\sqrt{x^2 + 1} + 1)$$
 for $x = 8^{-k}$ for $k=1,2,3,...$ \newline
-Why is computer giving different results even though $f==g$ ?
+Why is computer giving different results even though $f==g$ ?  \newline
+Which one is giving better results?
 \subsubsection*{Solution can be found in}
 \begin{verbatim}
     ./zad6/tests.jl
@@ -231,4 +232,48 @@ Why is computer giving different results even though $f==g$ ?
     \end{tabular}
 \end{table}
 \subsubsection*{Conclusion}
+$f(x)$ and $g(x)$ are giving different results due to rounding errors. \newline
+$\sqrt{x^2 + 1}$ cannot be calculated as accurate as we would like because step in range $[1,2)$ is $\delta=2^{-52}$. 
+Because of it, we cannot rely on this value. As accuracy in range $[0, 1)$ is much bigger, $g(x)$ conserves it's  accuracy for longer by making division with $x^2$
+\section{Exercise - Derivative}
+Compare approximations errors of function $f(x) = sin(x) + cos(3x)$ for approximation $f'(x_0) \approx \overline{f'}(x_0) = \frac{f(x_0 + h) - f(x_0)}{h}$ in point $x_0 = 1$ for $ h = 2^{-n}$, for $n=1,2,3...,54$\newline
+Why at some point decreasing $h$ doesn't improve approximation of derivative?\newline
+How does behave $1+h$?\newline
+
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad7/calculations.jl
+\end{verbatim}
+$f'(x) = 0.11694228168853815$
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+$n$ & approx derivative & error & 1+h \\ \hline
+0 & 2.0179892252685967 & 1.9010469435800585 & 2.0 \\ \hline
+1 & 1.8704413979316472 & 1.753499116243109 & 1.5 \\ \hline
+2 & 1.1077870952342974 & 0.9908448135457593 & 1.25 \\ \hline
+3 & 0.6232412792975817 & 0.5062989976090435 & 1.125 \\ \hline
+... & ... & ... & ... \\ \hline
+... & ... & ... & ... \\ \hline
+24 & 0.11694252118468285 & 2.394961446938737e-7 & 1.0000000596046448 \\ \hline
+25 & 0.116942398250103 & 1.1656156484463054e-7 & 1.0000000298023224 \\ \hline
+26 & 0.11694233864545822 & 5.6956920069239914e-8 & 1.0000000149011612 \\ \hline
+27 & 0.11694231629371643 & 3.460517827846843e-8 & 1.0000000074505806 \\ \hline
+28 & 0.11694228649139404 & 4.802855890773117e-9 & 1.0000000037252903 \\ \hline
+29 & 0.11694222688674927 & 5.480178888461751e-8 & 1.0000000018626451 \\ \hline
+30 & 0.11694216728210449 & 1.1440643366000813e-7 & 1.0000000009313226 \\ \hline
+31 & 0.11694216728210449 & 1.1440643366000813e-7 & 1.0000000004656613 \\ \hline
+... & ... & ... & ... \\ \hline
+... & ... & ... & ... \\ \hline
+51 & 0.0 & 0.11694228168853815 & 1.0000000000000004 \\ \hline
+52 & -0.5 & 0.6169422816885382 & 1.0000000000000002 \\ \hline
+53 & 0.0 & 0.11694228168853815 & 1.0 \\ \hline
+54 & 0.0 & 0.11694228168853815 & 1.0 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+We see that best accuracy is achieved for $n=28$
+Accuracy of approximation decreases after that because as we are decreasing $h$, there is bigger rounding error for $1+h$.
+It makes $f(1+h)$ calculate with error
 \end{document}
