@@ -6,12 +6,104 @@
 \usepackage[T1]{fontenc}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
-
-
+\title{Scientific Calculations - List 1}
+\author{Mateusz Pełechaty}
+\date{23 October 2022}%
 \begin{document}
+\maketitle
 
- 
-Hej siema wszystkim
-ą ć ę ź ż
-
+\section{Exploration of Arithmetic}
+\subsection{Machine Epsilon}
+Machine epsilon ($macheps$) is the smallest number $x$ such that $1+x > 1$ and $rd(1+x) = 1+x$. \newline
+Find machine epsilon with Julia and compare results with the function eps and with values from float.h
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+./zad1/find_macheps.jl
+./zad1/epsilons.c
+\end{verbatim}
+\subsubsection*{Method and results}
+It was calculated by setting $macheps := 1$ and then if $1+macheps > 1$, then $macheps$ is divided by $2$.
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+        Exercise 1.1 & Macheps & Eps & Float.h \\ \hline
+        Float16 & 0.000977 & 0.000977 & NULL \\ \hline
+        Float32 & 1.1920929e-7 & 1.1920929e-7 & 1.192093e-07 \\ \hline
+        Float64 & 2.220446049250313e-16 & 2.220446049250313e-16 & 2.220446e-16 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+Calculating macheps by me, \emph{eps(type)} function and Float.h constants provide the same values
+\subsection{Eta}
+Eta ($\eta$) is the smallest number such that $\eta > 0$. \newline
+Find $\eta$ and compare it with nextfloat(0.0) and $MIN_{sub}$ \newline
+Tests should be made for \textbf{Float16}, \textbf{Float32}, \textbf{Float64}
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad1/find_eta.jl
+\end{verbatim}
+\subsubsection*{Method and results}
+It was calculated by setting $\eta:= 1$ and then dividing by $2$ until $\frac{\eta}{2} > 0$
+$MIN_{sub}$ values are taken from \emph{W. Kahan's} book
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+        Exercise 1.2 & $\eta$ & nextfloat & $MIN_{sub}$ \\ \hline
+        Float16 & 6.0e-8 & 6.0e-8 & ~ \\ \hline
+        Float32 & 1.0e-45 & 1.0e-45 & 1.3e-45 \\ \hline
+        Float64 & 5.0e-324 & 5.0e-324 & 4.9e-324 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+nextfloat(0.0) and my method of calculating $\eta$ provide the same values. \newline
+Values are almost the same as $MIN_{sub}$
+\subsection{Questions}
+\textbf{Q:} What is difference between \emph{macheps} and arithmetic precision ($\epsilon$)? \newline
+\textbf{A:} Macheps is the smallest number that meets condition: $1+macheps > 1$. We can also say that $macheps=\beta^{1-t}$.  
+$\epsilon$ on the other hand is biggest relative error that can happen due to rounding 
+in arithmetic. So it is the smallest number $\epsilon$, 
+that meets condition  $ \epsilon \geq \delta = \frac{|rd(x) - x|}{x}$ for some number $x$. It was calculated in the lecture that $\epsilon = \frac{1}{2}\beta^{1-t}$ 
+\newline It follows from here that $\epsilon = \frac{macheps}{2}$
+\newline
+\textbf{Q:} What is difference between $\eta$ and ($MIN_{sub}$)? \newline
+\textbf{A:} $MIN_{sub}$ is minimal subnormal number. $\eta$ is defined by minimal number bigger than 0. They should be the same, but there are little differences between them
+\textbf{Q:} What is the difference between return value of \emph{floatmin} and $MIN_{nor}$ \newline
+\textbf{A:} They are the same value as seen in table below. Values of $MIN_{nor}$ are taken from \emph{W. Kahan's} book
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+        Q3 & floatmin & $MIN_{nor}$ \\ \hline
+        Float16 & 6.104e-5 & ~ \\ \hline
+        Float32 & 1.1754944e-38 & 1.2E-38 \\ \hline
+        Float64 & 2.2250738585072014e-308 & 2.2E-308 \\ \hline
+    \end{tabular}
+\end{table}
+\subsection{FloatMax}
+Calculate maximum possible number for Float16, Float32, Float64. 
+Compare values with the ones returned by function \emph{floatmax} and with data 
+\subsubsection*{Solution can be found in}
+\begin{verbatim}
+    ./zad1/floatmax.jl
+\end{verbatim}
+\subsubsection*{Method and results}
+It was calculated by $max1 := 4$, $max2 := 2$ and $max3:=1$. 
+Variables are doubled until $max1 == max2$. It means that they are infinity. 
+Then I am returning $max3$ 
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+        Exercise 1.4 & my max & floatmax & W. Kahan's MAX \\ \hline
+        Float16 & 3.277e4 & 6.55e4 & ~ \\ \hline
+        Float32 & 1.701e38 & 3.403e38 & 3.4 E38 \\ \hline
+        Float64 & 8.988e307 & 1.798e308 & 1.8 E308 \\ \hline
+    \end{tabular}
+\end{table}
+\subsubsection*{Conclusion}
+We can see that \emph{floatmax} is the same as \emph{W. Kahan's} Max \newline
+My method of calculating maximum gets me wrong because doubling number reaches infinity. 
+So $my max = \frac{1}{2} \cdot floatmax$
 \end{document}

@@ -7,11 +7,7 @@ Cel: Wyznaczenie Machine Epsilona kodem, Porownanie wartości z funkcją eps i F
 Rozwiązanie: `find_macheps.jl`, `epsilons.c`  
 Wyniki:
 Według moich wyników uzyskanych z plikow `find_macheps.jl` oraz `epsilons.c` wynika następująca tabela
-|         | Macheps                | Eps                   | Float.h      |
-|---------|------------------------|-----------------------|--------------|
-| Float16 | 0.000977               | 0.000977              | Not existent |
-| Float32 | 1.1920929e-7           | 1.1920929e-7          | 1.192093e-07 |
-| Float64 | 2.220446049250313e-16 | 2.220446049250313e-16 | 2.220446e-16 |
+eta
 
 Według [dokumentacji](https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Machine-epsilon) Julii, funkcja eps wyznacza machine epsilon.
 Wedlug [wikipedii](https://en.wikipedia.org/wiki/Machine_epsilon) macheps jest wyliczany poprawnie i jest to macheps `widespread definition`. 
