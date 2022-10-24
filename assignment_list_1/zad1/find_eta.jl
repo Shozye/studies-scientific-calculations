@@ -1,5 +1,8 @@
 # Mateusz Pełechaty, indeks: 261737
 
+"""
+:param type: IS a type of eta to calculate
+"""
 function find_eta(type)
     eta = type(1) / 2
     prev_eta = type(1)

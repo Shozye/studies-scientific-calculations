@@ -1,4 +1,7 @@
 # Mateusz Pełechaty, indeks: 261737
+"""
+:param type: IS a type of macheps to calculate
+"""
 function find_macheps(type)
     macheps = type(1)
     macheps_last = macheps
