@@ -11,7 +11,7 @@ function main()
         p_2 = Float32(0.01)
         for i in 0:40
             if i == 10
-                p_2 = round(p_2; digits=3)
+                p_2 = trunc(p_2; digits=3)
             end
             write(io, @sprintf("%s,%s,%s,%s\n", i, p_1, p_2, abs(p_1-p_2)))
             p_1 = p_next(p_1, Float32(3.0))
