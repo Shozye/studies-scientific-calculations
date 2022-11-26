@@ -179,17 +179,19 @@ All methods calculated roots properly if they were set on right starting approxi
 \subsection{Question}
 What would happen if in Newton method, for $f_1$ we will choose $x_0 \in (1, \infty)$?
 \subsubsection*{Answer}
-As we can see on \textbf{Table 4.}, if we choose $x_0 = 1.1$ for $f_1$, 
-then we get good answer, but on the graph we can see that as $x \rightarrow \infty$ then $f'(x) \rightarrow 0$. 
-Because of it, there exists such $x$, that $f'(x) < 1.0e-18$, which is too small for Float64 precision, so $fl(f'(x)) = 0$ and we are going to get an error$=2$ for newton method
+As we can see on \textbf{Table 4.}, for some starting approximation, Newton method will return root, and for other starting approximations it will return error=2.
+This is because derivative of $f_1$ get's very close to 0 for bigger $x$. For $x$ big enough we get $fl(f'(x)) = 0$, and then Newton method won't be able to calculate next approximation. 
+This is because tangent to the function is pararell to OX axis.
 \subsection{Question}
 What would happen if in Newton method, for $f_2$ we will choose $x_0 > 1$
 \subsubsection*{Answer}
-If we choose $x_0 > 1$ then Newton's method will try to find root by increasing $x$. It will find one, even though the only root is $x_0 = 1$, because
-$g(x)$ gets very close to $0$.  
-On \textbf{Table 4.} we can see example when $x_0 = 1.1$. Answer was $root \approx 14.2$ which is nowhere near expected mathematical answer, 
-but it has given the right answer, because $f_2(14.2) \approx 0$ for the given delta. Look on the \textbf{Figure 6.} for visualisation for $x_0 = 1.1$ and different accuracies.
-Note that for accuracy big enough, $f_2'(x) = 0$ in Float64, so Newton method will give error$=2$ as an output
+For $x_0 > 1$, tangent to $f_2$ in $x_0$ has got it's root on the right side of $x_0$. 
+Because of it, we have got $$x_{n+1} > x_n$$ where $n$ is iteration of Newton method.\\
+We know that $f_2$ has got only one root $x=0$ so Newton method won't be able to find it.
+Even though, we can see in \textbf{Table 4.} that Newton's method provided answer $root \approx 14.2$ for $x_0 = 1.1$.
+This is because, $lim_{x \rightarrow \infty} f_2(x) = 0$. In other words, For any $\epsilon > 0$, we can find $N$ such that for any $x > N$, $|f_2(x)| < \epsilon$. 
+Especially for $\epsilon = 1.0e-5$, which was asked in exercise.
+Look on the \textbf{Figure 6.} for visualisation of $x_0 = 1.1$ and different accuracies.
 
 \begin{figure}[h]
     \centering
