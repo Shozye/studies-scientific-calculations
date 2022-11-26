@@ -16,22 +16,52 @@
 \maketitle
 
 
-\section{Exercise 1}
+\section{Exercise}
 Write a function that finds roots of function by using bisection method
+\subsection*{Description}
+Bisection is an approximation method that tries to find a root of a function in a given interval. 
+It works by repeatedly bisecting the interval in half
+and then selecting the subinterval in which the root must lie for further processing.
+This method is guaranteed to find a root if the given function is continuous and ends of given interval are 
+of different signs. In it's principle it relies on \textbf{Intermediate value theorem (IVT)}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{bisection_example.png}
+    \caption{One iteration of bisection method for a = -0.5 and b = 1. The root is in the interval [-0.5, 0.25]}
+\end{figure}
 \subsection*{Solution and tests}
 Function with documentation can be found in \textit{src/roots.jl}\\
 Tests can run with \textit{test/test\_roots.jl} and their definitions are in \textit{test/utils.jl}
-\section{Exercise 2}
+\section{Exercise}
 Write a function that finds roots of function by using newton method
+\subsection*{Description}
+Newton's method is a technique for finding roots of a functions by upgrading an initial guess to a better approximation of the root.
+It is based on the idea that if a function is differentiable, 
+then a tangent line to the function at a given point can be used to find a better approximation of the root.
+For it to function properly we need to know the derivative of the function and the initial guess which should be close enough to the real root.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{newton_example.png}
+    \caption{One iteration of newton method for a = -0.5 and b = 1. The root is in the interval [-0.5, 0.25]}
+\end{figure}
 \subsection*{Solution and tests}
 Function with documentation can be found in \textit{src/roots.jl}\\
 Tests can run with \textit{test/test\_roots.jl} and their definitions are in \textit{test/utils.jl}
-\section{Exercise 3}
+\section{Exercise}
 Write a function that finds roots of function by using secant method
+\subsection*{Description}
+The secant method is a root-finding algorithm that uses a succession of roots of secant lines to better approximate a root of a function.
+It starts by drawing a secant line between two points, and then uses the intersection of the line and the x-axis as the next approximation.
+Two starting approximations should also be chosen close enough to the real root. If they are too far apart, the method may fail to converge.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{secant_example.png}
+    \caption{One iteration of secant method for a = -0.5 and b = 1. The root is in the interval [-0.5, 0.25]}
+\end{figure}
 \subsection*{Solution and tests}
 Function with documentation can be found in \textit{src/roots.jl}\\
 Tests can run with \textit{test/test\_roots.jl} and their definitions are in \textit{test/utils.jl}
-\section{Exercise 4}
+\section{Exercise}
 Use previously calculated functions to find root of 
 $$f(x) = sin x - (\frac{1}{2}x)^2$$
 Functions should be called with following arguments:
@@ -62,9 +92,9 @@ Results can be found in \textbf{Table 1.} and \textbf{Figure 1.}
 \end{figure}
 \subsection{Conclusions}
 We can see that root finding methods work properly for $f(x) = sin(x) + (\frac{1}{2}\cdot x)^2$.
-For test data given as a example, \textbf{secant} method worked best, because it has found given accuracy with least amount of iterations.
+For test data given as a example, \textbf{secant} method worked best, because it has found asked accuracy with least amount of iterations.
 
-\section{Exercise 5}
+\section{Exercise}
 With usage of bisection method, find cross point of functions $f(x) = 3x$, $g(x) = e^x$. Required accuracies: $\delta=10^{-4}$, $\epsilon=10^{-4}$
 \subsection{Solution and results}
 To compute cross points of $f$ and $g$ we are going to find roots of $f-g$. As there are 2 cross points, we need to find two roots.\\
@@ -91,7 +121,7 @@ Results can be found in \textbf{Table 2.} and \textbf{Figure 2.} and \textbf{Fig
     \captionof{figure}{Found bigger root}
 \end{minipage}
 \end{minipage}
-\section{Exercise 6}
+\section{Exercise}
 \subsection{Task}
 Find root of $f_1(x) = e^{1-x} - 1$ and $f_2(x) = xe^{-x}$ by using bisection, Newton and secant methods. Required accuracies: $\delta=10^{-5}$, $\epsilon=10^{-5}$. Choose accordingly starting approximations
 
