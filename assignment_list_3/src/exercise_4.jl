@@ -5,7 +5,7 @@ include("roots.jl")
 include("plot_helpers.jl")
 
 f(x) = sin(x) - (0.5x)^2
-df(x) = cos(x) - x
+df(x) = cos(x) - x/2
 
 maxit = 100000
 accuracy = Float64(1/2 * 10^(-5))

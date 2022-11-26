@@ -79,7 +79,7 @@ Results can be found in \textbf{Table 1.} and \textbf{Figure 1.}
     \hline
         \textbf{Method} & \textbf{root} & \textbf{$f(root)$} & \textbf{iterations} & \textbf{error} \\ \hline
         bisection & 1.9337539672851562 & -2.7027680138402843e-7 & 16 & 0 \\ \hline
-        newton & 1.933749984135789 & 4.995107540040067e-6 & 13 & 0 \\ \hline
+        newton & 1.933753779789742 & -2.2423316314856834e-8 & 4 & 0 \\ \hline
         secant & 1.933753644474301 & 1.564525129449379e-7 & 4 & 0 \\ \hline
     \end{tabular}
     \caption{Results of finding roots of $f(x) = sin(x) + (\frac{1}{2}\cdot x)^2$}
@@ -92,7 +92,7 @@ Results can be found in \textbf{Table 1.} and \textbf{Figure 1.}
 \end{figure}
 \subsection{Conclusions}
 We can see that root finding methods work properly for $f(x) = sin(x) + (\frac{1}{2}\cdot x)^2$.
-For test data given as a example, \textbf{secant} method worked best, because it has found asked accuracy with least amount of iterations.
+For test data given as a example, \textbf{newton} method worked best, because it has found asked accuracy with least amount of iterations.
 
 \section{Exercise}
 With usage of bisection method, find cross point of functions $f(x) = 3x$, $g(x) = e^x$. Required accuracies: $\delta=10^{-4}$, $\epsilon=10^{-4}$
