@@ -1,3 +1,4 @@
+# Mateusz Pełechaty, 261737
 include("../src/interpolation.jl")
 
 using .Interpolation
