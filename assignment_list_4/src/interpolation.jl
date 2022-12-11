@@ -62,12 +62,21 @@ Function that calculates the coefficients of the interpolating polynomial in the
 """
 function general(x::Vector{Float64}, fx::Vector{Float64})
     n = length(x)
+    coefficients = Array{Float64}(undef, n, n)
+    coefficients[1,1] = 1
+    for i in 2:n
+        for j in 1:n
+            coefficients[i,j] = 0
+            if j != 1
+                coefficients[i, j] += coefficients[i-1, j-1]
+            end
+            coefficients[i, j] -= coefficients[i-1, j]*x[i-1]
+        end
+    end
     a = zeros(n)
-    a[n] = fx[n]
-    for i in (n-1):-1:1
-        a[i] = fx[i] - x[i] * a[i+1]
-        for j in (i+1):(n-1)
-            a[j] += -x[i] * a[j+1]
+    for j in 1:n
+        for i in 1:n
+            a[j] += coefficients[i, j]*fx[i]
         end
     end
     return a

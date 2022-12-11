@@ -23,7 +23,7 @@ Function should be named \textit{dividedDifference} and should take two argument
     \item $\vec{f}$ : vector of function values at nodes
 \end{itemize}
 Function should not use two-dimensional array.
-\subsection*{Description}
+\subsection*{Algorithm Description}
 Newton's divided differences are defined as follows:
 \begin{equation}
     f[x_0, x_1, \dots, x_n] = \frac{f[x_1, x_2, \dots, x_n] - f[x_0, x_1, \dots, x_{n-1}]}{x_n - x_0}\\
@@ -32,7 +32,7 @@ Newton's divided differences are defined as follows:
     f[x_i] = f(x_i)
 \end{equation*}
 We can compute them in one-dimensional array by looping from last to first with the help of formula $(1)$:
-\begin{equation}
+\begin{equation*}
 \begin{pmatrix}
     f[x_0] \\
     f[x_1] \\
@@ -59,7 +59,7 @@ We can compute them in one-dimensional array by looping from last to first with 
     f[x_0 \hdots x_{n-2},x_{n-1}] \\
     f[x_0 \hdots x_{n-1}, x_n] \\
 \end{pmatrix}
-\end{equation}
+\end{equation*}
 \subsection*{Solutions and tests}
 Function with documentation can be found in \textit{src/interpolation.jl}. \\
 Tests are in \textit{test/test\_dividedDifference.jl}
@@ -73,7 +73,7 @@ Function should be named \textit{valueNewton} and should take three arguments:
     \item t : point at which polynomial should be evaluated
 \end{itemize}
 Function should compute in $O(n)$ time complexity
-\subsection*{Description}
+\subsection*{Algorithm Description}
 Method of computation is based on Horner's rule:
 \begin{equation*}
 \begin{split}
@@ -97,6 +97,31 @@ Function should compute in $O(n^2)$ time complexity
 \subsection*{Solutions and tests}
 Function with documentation can be found in \textit{src/interpolation.jl}.\\
 Tests are in \textit{test/test\_general.jl}
+\subsection*{Algorithm Description}
+We are going to multiplicate all terms in a polynomial in Newton's form in a smart way.\\
+Assume we have $\vec{x}[0..n-1]$ and \textit{divided differences} $\vec{c}[0..n-1]$\\
+Let $q_k = \prod^{k-1} _{i=0}(x-x_i)$, $q_0 = 1$\\
+Now we can write interpolated polynomial in Newton form as
+\begin{equation*}
+    f(x) = \sum^n_{i=0}{c_i \cdot q_i(x)}
+\end{equation*}
+Let's start by computing every $q_i$. From $q_i = q_{i-1} \cdot (x-x_{i-1})$ 
+we can figure out following coefficients (\textbf{C}) table and thus, the relation
+\begin{table}[!ht] 
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+        \textbf{C} & \textbf{$q_0$} & \textbf{$q_1$} & \textbf{$q_2$} & \textbf{$q_3$} \\ \hline
+        \textbf{$a_0$} & $1$ & $-x_1$ & $x_1 \cdot x_2$ & $- x_1 \cdot x_2 \cdot x_3$ \\ \hline
+        \textbf{$a_1$} & 0 & $1$ & $-x_1 - x_2$ & $x_1 \cdot x_2 - x_3 \cdot (-x_1 - x_2)$ \\ \hline
+        \textbf{$a_2$} & 0 & 0 & $1$ & $- x_1 - x_2 - x_3$ \\ \hline
+        \textbf{$a_3$} & 0 & 0 & 0 & $1$ \\ \hline
+    \end{tabular}
+\end{table}
+\begin{equation*}
+    C[q_i, a_i] = C[q_{i-1}, a_{i-1}] - C[q_{i-1}, a_i] \cdot x_{i+1}
+\end{equation*}
+Note that to compute $a_i$ of $f(x)$ we need to make scalar product of row $a_i$ in $C$ and $\vec{c}$
 \section{Exercise}
 Write a function that will interpolate given function on a given interval using Newton's interpolation formula.
 Then it should plot the function and its interpolation. Function should be named \textit{drawInterpolation} and should take four arguments:
@@ -124,8 +149,8 @@ Solution can be found in \textit{src/ex5/main.jl}. Plots can be found in \textit
 \end{figure}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{ex5_plot1.png}
-    \caption{Interpolation of $f(x)=x^2$, $[a,b] = [-1,1]$ and $n = [5,10,15]$}
+    \includegraphics[width=1\textwidth]{ex5_plot2.png}
+    \caption{Interpolation of $f(x)=x^2 \cdot sin(x)$, $[a,b] = [-1,1]$ and $n = [5,10,15]$}
 \end{figure}
 \subsection*{Conclusion}
 We can see that there is no visible difference between interpolation and function itself. 

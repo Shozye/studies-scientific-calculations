@@ -11,7 +11,7 @@ function test1()
 end
 
 function test2()
-    f = x -> x^2
+    f = x -> x^2 * sin(x)
     a = -1.0
     b = 1.0
     ns = [5,10,15]
